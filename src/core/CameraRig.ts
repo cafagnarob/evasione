@@ -6,7 +6,7 @@
  * - FOV basso (32°) per appiattire la prospettiva
  * - posizionata davanti al corridoio (Z positivo), a metà altezza della parete
  * - aggiorna le proporzioni quando la finestra cambia dimensione
- * Per ora è fissa; nel passo del personaggio aggiungeremo l'inseguimento sull'asse X.
+ * “Segue il personaggio sull’asse X con un movimento morbido”.
  */
 import * as THREE from "three"
 
@@ -14,6 +14,7 @@ import * as THREE from "three"
 const FOV = 32
 const CAMERA_DISTANCE = 8 // metri davanti alla parete di fondo
 const CAMERA_HEIGHT = 1.5 // metà circa della parete da 3 m
+const FOLLOW_SPEED = 5 // più è alto, più la camera è "attaccata" al personaggio
 
 export class CameraRig {
   readonly camera: THREE.PerspectiveCamera
@@ -32,5 +33,12 @@ export class CameraRig {
     this.camera.aspect = width / height
     // Senza questa riga la camera continua a usare le vecchie proporzioni e la scena si deforma
     this.camera.updateProjectionMatrix()
+  }
+
+  /** Segue il personaggio sull'asse X con un leggero ritardo, per un movimento morbido */
+  follow(targetX: number, delta: number): void {
+    // Quota di distanza da recuperare in questo frame, indipendente dagli FPS
+    const t = 1 - Math.exp(-FOLLOW_SPEED * delta)
+    this.camera.position.x += (targetX - this.camera.position.x) * t
   }
 }
