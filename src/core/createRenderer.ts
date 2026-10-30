@@ -18,7 +18,7 @@ export function createRenderer(): THREE.WebGLRenderer {
 
   // Ombre: senza questa riga nessuna luce proietterà ombre, nemmeno dalle sbarre
   renderer.shadowMap.enabled = true
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap
+  renderer.shadowMap.type = THREE.PCFShadowMap
 
   // Tone mapping: avvicina la resa a quella di Blender (AgX è il default di Blender 4)
   renderer.toneMapping = THREE.AgXToneMapping
